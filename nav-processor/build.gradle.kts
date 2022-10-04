@@ -22,6 +22,7 @@ kotlin {
                 implementation("com.google.devtools.ksp:symbol-processing-api:$kspVersion")
                 implementation("com.squareup:kotlinpoet:$kotlinpoetVersion")
                 implementation("com.squareup:kotlinpoet-metadata:$kotlinpoetVersion")
+                implementation("com.squareup:kotlinpoet-ksp:$kotlinpoetVersion")
 
                 implementation(project(":annotations"))
             }
