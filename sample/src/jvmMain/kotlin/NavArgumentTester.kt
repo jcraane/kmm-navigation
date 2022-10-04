@@ -6,6 +6,7 @@ fun main(args: Array<String>) {
     println(RaceDetailsNavEvent.route)
     println(RaceDetailsNavEvent.raceId)
     println(RaceDetailsNavEvent.seasonId)
+    println(RaceDetailsNavEvent.arguments)
     val raceDetailsEvent = RaceDetailsNavEvent("10", "100")
     println(raceDetailsEvent.route())
 
@@ -16,5 +17,6 @@ fun main(args: Array<String>) {
     when (event) {
         is ProfileDetailsNavEvent -> println("profile details event")
         is RaceDetailsNavEvent -> println("race details event")
+        else -> {}
     }
 }

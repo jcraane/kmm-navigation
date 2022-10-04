@@ -6,6 +6,7 @@ import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.ksp.writeTo
 import dev.jamiecraane.ksp.naventry.annotations.ArgType
 import dev.jamiecraane.ksp.naventry.annotations.Argument
@@ -86,8 +87,25 @@ class RouteAnnotationProcessor(
                 .build()
         }
 
-        private fun createCompanionWithFullRouteAndArguments(fullRouteName: String, argumentAnnotations: Sequence<Argument>) =
-            TypeSpec.companionObjectBuilder()
+        private fun createCompanionWithFullRouteAndArguments(fullRouteName: String, argumentAnnotations: Sequence<Argument>): TypeSpec {
+            val argumentNamesAndTypes = PropertySpec.builder(
+                "arguments", List::class.asClassName().parameterizedBy(
+                    Pair::class.asClassName().parameterizedBy(
+                        String::class.asTypeName(), ArgType::class.asTypeName()
+                    )
+                )
+            ).initializer(buildString {
+                append("listOf(")
+                append(
+                    argumentAnnotations.map { argument ->
+                        "Pair(\"${argument.name}\",ArgType.${argument.type})"
+                    }.joinToString(",")
+                )
+                append(")")
+            }).build()
+
+            //            val arguments = listOf(raceId to ArgType.STRING)
+            return TypeSpec.companionObjectBuilder()
                 .addProperty(
                     PropertySpec.builder("route", String::class)
                         .initializer("%S", fullRouteName)
@@ -102,7 +120,9 @@ class RouteAnnotationProcessor(
                         )
                     }
                 }
+                .addProperty(argumentNamesAndTypes)
                 .build()
+        }
     }
 }
 
