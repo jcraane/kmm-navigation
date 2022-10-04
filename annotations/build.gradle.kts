@@ -1,6 +1,10 @@
 plugins {
     kotlin("multiplatform")
+    id("maven-publish")
 }
+
+group = "dev.jamiecraane"
+version = "0.1-SNAPSHOT"
 
 kotlin {
     jvm()

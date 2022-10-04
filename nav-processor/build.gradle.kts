@@ -2,10 +2,11 @@ val kspVersion: String by project
 
 plugins {
     kotlin("multiplatform")
+    id("maven-publish")
 }
 
-group = "com.example"
-version = "1.0-SNAPSHOT"
+group = "dev.jamiecraane"
+version = "0.1-SNAPSHOT"
 
 kotlin {
     jvm() {

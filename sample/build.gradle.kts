@@ -18,6 +18,9 @@ kotlin {
                 implementation(project(":annotations"))
             }
         }
+        val jvmMain by getting {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+        }
         /*val linuxX64Main by getting
         val linuxX64Test by getting
         val androidNativeX64Main by getting
