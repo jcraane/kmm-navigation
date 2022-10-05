@@ -3,6 +3,8 @@
 - Add iOS examples and perhaps adapt the generated code.
 - Generate supporting code, for example extension function to convert generic args to NavHost args.
 - Support more types for arguments than the four primitives it does now.
+- It is required to define a base class which is preferably a sealed class to make a closed navigation event hierarchy. This might change in the future.
+- There is no support for nesting navigation events at the moment.
 
 This projects implements a Kotlin Symbol Processor (KSP) to help implement navigation between screens in KMM apps.
 
