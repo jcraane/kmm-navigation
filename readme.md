@@ -1,4 +1,8 @@
-Proof of Concept, not production ready yet.
+## todo
+- Proof of Concept, not production ready yet.
+- Add iOS examples and perhaps adapt the generated code.
+- Generate supporting code, for example extension function to convert generic args to NavHost args.
+- Support more types for arguments than the four primitives it does now.
 
 This projects implements a Kotlin Symbol Processor (KSP) to help implement navigation between screens in KMM apps.
 
@@ -84,4 +88,23 @@ composable(
     val raceId = entry.arguments?.getString(RaceDetailsNavEvent.raceId) ?: ""
     RaceScreen(seasonViewModel, raceId)
 }
+```
+
+The toNavArguments is an extension property which converts generic args to NavHost args. This might be included in the code generator
+in the future.
+
+```kotlin
+val List<Pair<String, ArgType>>.toNavArguments: List<NamedNavArgument>
+    get() {
+        return this.map { argument ->
+            navArgument(argument.first) {
+                when (argument.second) {
+                    ArgType.STRING -> NavType.StringType
+                    ArgType.FLOAT -> NavType.FloatType
+                    ArgType.INT -> NavType.IntType
+                    ArgType.LONG -> NavType.LongType
+                }
+            }
+        }
+    }
 ```
