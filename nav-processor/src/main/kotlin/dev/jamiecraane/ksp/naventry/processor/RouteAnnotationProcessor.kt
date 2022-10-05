@@ -104,7 +104,6 @@ class RouteAnnotationProcessor(
                 append(")")
             }).build()
 
-            //            val arguments = listOf(raceId to ArgType.STRING)
             return TypeSpec.companionObjectBuilder()
                 .addProperty(
                     PropertySpec.builder("route", String::class)
