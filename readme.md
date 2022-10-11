@@ -54,8 +54,8 @@ scope.launch {
 }
 ```
 
-The above navigator object is implemented as follows. The navigator defines a channel to which naivgation events are send to.
-
+The above navigator object is implemented as follows. The navigator defines a channel to which navigation events are send to.
+[style.json](../../../../Downloads/ACCEPTANCE-(in-use)(ckzy3z68o002816muigbjriq7)/style.json)
 ```kotlin
 class ScreenNavigator {
     private val eventChannel = Channel<BaseNavigationEvent>()

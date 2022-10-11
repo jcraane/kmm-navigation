@@ -6,6 +6,19 @@ plugins {
 group = "dev.jamiecraane"
 version = "0.1-SNAPSHOT"
 
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/jcraane/kmm-navigation")
+            credentials {
+                username = project.properties["gpr.user"] as? String ?: System.getenv("gpr.user")
+                password = project.properties["gpr.key"] as? String ?: System.getenv("gpr.key")
+            }
+        }
+    }
+}
+
 kotlin {
     jvm()
     listOf(

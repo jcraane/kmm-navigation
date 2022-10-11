@@ -11,7 +11,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "multiplatform"
+rootProject.name = "kmm-navigation"
 
 include(":sample")
 include(":nav-processor")
