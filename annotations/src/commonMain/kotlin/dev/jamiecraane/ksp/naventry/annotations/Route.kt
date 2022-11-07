@@ -20,7 +20,7 @@ package dev.jamiecraane.ksp.naventry.annotations
  */
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
-annotation class Route(val path: String, val baseClassQualifiedName: String = "")
+annotation class Route(val path: String)
 
 /**
  * Defines a single nav argument. The name should match the path in the Route annotation.

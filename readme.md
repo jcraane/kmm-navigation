@@ -5,7 +5,8 @@
 - Support more types for arguments than the four primitives it does now.
 - It is required to define a base class which is preferably a sealed class to make a closed navigation event hierarchy. This might change in the future.
 - There is no support for nesting navigation events at the moment.
-- The library is not present in a Maven repository yet. Install locally by executing: ```./gradelw publishToMavenLocal```
+- The library is not present in a Maven repository yet. Install locally by executing: ```./gradelw publishToMavenLocal``` (when installing locally, make sure you add mavenLocal() to repositories of the pluginManagement section in settings.gradle)
+  - Build locally from command line: ./gradlew clean :sample:build
 
 This projects implements a Kotlin Symbol Processor (KSP) to help implement navigation between screens in KMM apps.
 

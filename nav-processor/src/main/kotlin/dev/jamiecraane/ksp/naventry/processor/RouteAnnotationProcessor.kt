@@ -35,10 +35,47 @@ class RouteAnnotationProcessor(
         override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
             logger.info("visitClassDeclaration")
 
+            val packageName = classDeclaration.containingFile!!.packageName.asString()
+            val baseClassName = createSealedBaseClass(packageName)
+            createNavigationEvent(classDeclaration, packageName, baseClassName)
+        }
+
+        /**
+         * Creates a sealed base class for all navigation events.
+         *
+         * @return Name of the blass name.
+         */
+        private fun createSealedBaseClass(packageName: String): ClassName {
+            val className = "BaseNavigationEvent"
+
+            val routeFunction = FunSpec.builder("route")
+                .addModifiers(KModifier.ABSTRACT)
+                .returns(String::class)
+                .build()
+
+            val outputFile = FileSpec.builder(packageName = packageName, fileName = className)
+                .addType(
+                    TypeSpec.classBuilder(className)
+                        .addModifiers(KModifier.SEALED)
+                        .addFunction(routeFunction)
+                        .build()
+                )
+                .build()
+
+            try {
+                outputFile.writeTo(codeGenerator, Dependencies(aggregating = false))
+            } catch (e: FileAlreadyExistsException) {
+                // Ignore
+            }
+
+            return ClassName(packageName = packageName, className)
+        }
+
+        @OptIn(KspExperimental::class)
+        private fun createNavigationEvent(classDeclaration: KSClassDeclaration, packageName: String, baseClassName: ClassName) {
             val routeAnnotation = classDeclaration.getAnnotationsByType(Route::class)
             val argumentAnnotations = classDeclaration.getAnnotationsByType(Argument::class)
 
-            val superType = routeAnnotation.first().baseClassQualifiedName
             val fullRouteName = routeAnnotation.first().path
 
             val packageName = classDeclaration.containingFile!!.packageName.asString()
@@ -46,7 +83,7 @@ class RouteAnnotationProcessor(
 
             val primaryConstructor = FunSpec.constructorBuilder().apply {
                 argumentAnnotations.forEach { argument ->
-                    addParameter(argument.name, getTypePoet(argument.type))
+                    addParameter(argument.name, getNavigationArgumentType(argument.type))
                 }
             }.build()
 
@@ -56,12 +93,13 @@ class RouteAnnotationProcessor(
             val outputFile = FileSpec.builder(packageName = packageName, fileName = className)
                 .addType(
                     TypeSpec.classBuilder(className)
-                        .superclass(ClassName("", superType))
+                        .superclass(baseClassName)
                         .primaryConstructor(primaryConstructor)
                         .apply {
                             argumentAnnotations.forEach { argument ->
                                 addProperty(
-                                    PropertySpec.builder(argument.name, getTypePoet(argument.type)).initializer(argument.name).build()
+                                    PropertySpec.builder(argument.name, getNavigationArgumentType(argument.type)).initializer(argument.name)
+                                        .build()
                                 )
                             }
                         }
@@ -83,6 +121,7 @@ class RouteAnnotationProcessor(
             }
             return FunSpec.builder("route")
                 .returns(String::class)
+                .addModifiers(KModifier.OVERRIDE)
                 .addCode(replaceStatements)
                 .build()
         }
@@ -113,7 +152,7 @@ class RouteAnnotationProcessor(
                 .apply {
                     argumentAnnotations.forEach { argument ->
                         addProperty(
-                            PropertySpec.builder(argument.name, getTypePoet(argument.type))
+                            PropertySpec.builder(argument.name, getNavigationArgumentType(argument.type))
                                 .initializer("%S", argument.name)
                                 .build()
                         )
@@ -125,7 +164,7 @@ class RouteAnnotationProcessor(
     }
 }
 
-private fun getTypePoet(type: ArgType) = when (type) {
+private fun getNavigationArgumentType(type: ArgType) = when (type) {
     ArgType.STRING -> String::class
     ArgType.FLOAT -> Float::class
     ArgType.INT -> Int::class

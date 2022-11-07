@@ -7,15 +7,11 @@ import dev.jamiecraane.ksp.naventry.annotations.Route
 /**
  * Superclass for all generated navigation events.
  */
-sealed class NavigationEvent
-
-const val name = "dev.jamiecraane.example.NavigationEvent"
-
-@Route("race/{seasonId}/{raceId}", baseClassQualifiedName = name)
+@Route("race/{seasonId}/{raceId}")
 @Argument(name = "seasonId", type = ArgType.STRING)
 @Argument(name = "raceId", type = ArgType.STRING)
 object RaceDetails
 
-@Route("profile/{profileId}", baseClassQualifiedName = name)
+@Route("profile/{profileId}")
 @Argument(name = "profileId", type = ArgType.STRING)
 object ProfileDetails
