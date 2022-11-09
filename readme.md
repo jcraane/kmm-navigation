@@ -71,12 +71,8 @@ Those navigation events can be consumed and used (in Android) as follows:
 
 ```kotlin
 val event: BaseNavigationEvent? by navigator.navigationEvents.collectAsStateWithLifecycle(null)
-
-event.let {
-    when (it) {
-        is RaceDetailsNavEvent -> navHostController.navigate(it.route()) // it.route gives: race/10
-        null -> { /*Do nothing*/ }
-    }
+if (event != null) {
+  navHostController.navigate(event.route())
 }
 ```
 
