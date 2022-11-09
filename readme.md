@@ -19,9 +19,7 @@ A navigation destination typically contains the following data:
 This KSP enables declaring the above requirements as a navigation event using annotations:
 
 ```kotlin
-sealed class BaseNavigationEvent
-
-@Route("race/{raceId}", baseClassQualifiedName = "BaseNavigationEvent")
+@Route("race/{raceId}")
 @Argument(name = "raceId", type = ArgType.STRING)
 object RaceDetails
 ```
